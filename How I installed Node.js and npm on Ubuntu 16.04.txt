@@ -1,0 +1,128 @@
+(user@air) ~/Desktop $ ssh user@ubuntu
+
+(user@ubuntu) ~ $ node -v
+v4.2.6
+
+(user@ubuntu) ~ $ npm -v
+3.5.2
+
+(user@ubuntu) ~ $ node -e 'console.log(process.versions.v8);'
+4.5.103.35
+  ares: '1.10.1-DEV',
+  icu: '55.1',
+  modules: '46',
+  openssl: '1.0.2g-fips' }
+
+(user@ubuntu) ~ $ sudo apt install curl
+
+(user@ubuntu) ~ $ sudo apt purge nodejs npm
+
+(user@ubuntu) ~ $ curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+
+## Installing the NodeSource Node.js 8.x LTS Carbon repo...
+
+
+## Populating apt-get cache...
+
++ apt-get update
+Get:1 http://security.ubuntu.com/ubuntu xenial-security InRelease [107 kB]
+Hit:2 http://ppa.launchpad.net/webupd8team/atom/ubuntu xenial InRelease
+Hit:3 http://nl.archive.ubuntu.com/ubuntu xenial InRelease
+Hit:4 http://nl.archive.ubuntu.com/ubuntu xenial-updates InRelease
+Hit:5 http://nl.archive.ubuntu.com/ubuntu xenial-backports InRelease
+Get:6 http://security.ubuntu.com/ubuntu xenial-security/main amd64 DEP-11 Metadata [67.5 kB]
+Get:7 http://security.ubuntu.com/ubuntu xenial-security/main DEP-11 64x64 Icons [68.0 kB]
+Get:8 http://security.ubuntu.com/ubuntu xenial-security/universe amd64 DEP-11 Metadata [107 kB]
+Get:9 http://security.ubuntu.com/ubuntu xenial-security/universe DEP-11 64x64 Icons [147 kB]
+Fetched 496 kB in 0s (830 kB/s)
+Reading package lists... Done
+
+## Confirming "xenial" is supported...
+
++ curl -sLf -o /dev/null 'https://deb.nodesource.com/node_8.x/dists/xenial/Release'
+
+## Adding the NodeSource signing key to your keyring...
+
++ curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
+OK
+
+## Creating apt sources list file for the NodeSource Node.js 8.x LTS Carbon repo...
+
++ echo 'deb https://deb.nodesource.com/node_8.x xenial main' > /etc/apt/sources.list.d/nodesource.list
++ echo 'deb-src https://deb.nodesource.com/node_8.x xenial main' >> /etc/apt/sources.list.d/nodesource.list
+
+## Running `apt-get update` for you...
+
++ apt-get update
+Hit:1 http://nl.archive.ubuntu.com/ubuntu xenial InRelease
+Hit:2 http://ppa.launchpad.net/webupd8team/atom/ubuntu xenial InRelease
+Hit:3 http://security.ubuntu.com/ubuntu xenial-security InRelease
+Hit:4 http://nl.archive.ubuntu.com/ubuntu xenial-updates InRelease
+Hit:5 http://nl.archive.ubuntu.com/ubuntu xenial-backports InRelease
+Get:6 https://deb.nodesource.com/node_8.x xenial InRelease [4,646 B]
+Get:7 https://deb.nodesource.com/node_8.x xenial/main Sources [761 B]
+Get:8 https://deb.nodesource.com/node_8.x xenial/main amd64 Packages [1,006 B]
+Get:9 https://deb.nodesource.com/node_8.x xenial/main i386 Packages [1,002 B]
+Fetched 7,415 B in 1s (7,216 B/s)
+Reading package lists... Done
+
+## Run `sudo apt-get install -y nodejs` to install Node.js 8.x LTS Carbon and npm
+## You may also need development tools to build native addons:
+     sudo apt-get install gcc g++ make
+## To install the Yarn package manager, run:
+     curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+     echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+     sudo apt-get update && sudo apt-get install yarn
+
+
+(user@ubuntu) ~ $ sudo apt-get install -y nodejs
+Setting up nodejs (8.11.1-1nodesource1) ...
+
+(user@ubuntu) ~ $ sudo apt autoremove
+
+(user@ubuntu) ~ $
+
+(user@ubuntu) ~ $ node -v
+v8.11.1
+
+(user@ubuntu) ~ $ npm -v
+5.6.0
+
+(user@ubuntu) ~ $ node -e 'console.log(process.versions.v8);'
+6.2.414.50
+
+(user@ubuntu) ~ $ node -e 'console.log(process.versions);'
+{ http_parser: '2.8.0',
+  node: '8.11.1',
+  v8: '6.2.414.50',
+  uv: '1.19.1',
+  zlib: '1.2.11',
+  ares: '1.10.1-DEV',
+  modules: '57',
+  nghttp2: '1.25.0',
+  openssl: '1.0.2o',
+  icu: '60.1',
+  unicode: '10.0',
+  cldr: '32.0',
+  tz: '2017c' }
+  
+  
+  
+(user@ubuntu) ~ $ curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+OK
+
+# Something wonky here; TODO
+$ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+deb https://dl.yarnpkg.com/debian/ stable main
+
+(user@ubuntu) ~ $ sudo apt-get update && sudo apt-get install yarn
+Setting up yarn (1.6.0-1) ...
+
+(user@ubuntu) ~ $ yarn -v
+1.6.0
+
+(user@ubuntu) ~ $
+
+  
+  
+
