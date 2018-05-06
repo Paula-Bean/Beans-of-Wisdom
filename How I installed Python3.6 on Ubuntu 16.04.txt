@@ -5,6 +5,24 @@ wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tar.xz
 xz -d Python-3.6.5.tar.xz
 tar xvf Python-3.6.5.tar
 cd Python-3.6.5
-./configure
-make
+
+# Now edit setup.py so that the path '/usr/include' is in the list '':
+
+        search_for_ssl_incs_in = [
+                              '/usr/local/ssl/include',
+                              '/usr/contrib/ssl/include/',
+                              '/usr/include',
+                             ]
+# and then either:
+
+  # build including running the test suite, which easily takes 20 minutes:
+  ./configure --enable-optimizations  
+  make -j8
+  
+# or
+
+  # build faster
+  ./configure
+  make -j8
+
 sudo make install
