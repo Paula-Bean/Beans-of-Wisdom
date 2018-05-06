@@ -6,7 +6,7 @@ xz -d Python-3.6.5.tar.xz
 tar xvf Python-3.6.5.tar
 cd Python-3.6.5
 
-# Now edit setup.py so that the path '/usr/include' is in the list '':
+# Now edit setup.py so that the path '/usr/include' is in the list 'search_for_ssl_incs_in':
 
         search_for_ssl_incs_in = [
                               '/usr/local/ssl/include',
