@@ -1,0 +1,61 @@
+2019-05-16
+Installing PHP7.2 and Nginx on Ubuntu Server 18.04 LTS
+Excerpt from https://linuxize.com/post/how-to-install-php-on-ubuntu-18-04 (see this URL for PHP 7.1 and 7.3 versions)
+
+# Nginx calls PHP through FPM:
+sudo apt install -y php-fpm nginx
+
+# Check
+php --version
+nginx -v
+systemctl status php7.2-fpm nginx
+
+# Install PHP extensions:  sudo apt install php-[extname]
+# List of extensions: apt-cache search php- | egrep -i 'extension|module'  (not sure if it is exhaustive)
+
+# Install GD PHP extension
+sudo apt install php-gd
+
+# Need to restart FPM after installing an extension
+systemctl restart php7.2-fpm
+
+# Edit nginx configuration, for example:
+sudo nano /etc/nginx/nginx.conf
+
+-----------
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+    worker_connections 768;
+    }
+
+http {
+    include /etc/nginx/mime.types;
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+
+    server {
+        location ~ \.php$ {
+            include snippets/fastcgi-php.conf;
+            fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+            }
+        }
+}
+-----------
+
+# After editing nginx configuration, restart (or reload) necessary:
+sudo systemctl restart nginx
+
+# Test PHP processing
+sudo nano /usr/share/nginx/html/info.php
+                       
+--------
+<?php
+phpinfo();
+--------
+                               
+curl http://127.0.0.1/info.php
+

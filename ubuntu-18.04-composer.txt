@@ -1,0 +1,25 @@
+2019-05-16
+Installing Composer on Ubuntu Server 18.04 LTS
+Excerpt from https://linuxize.com/post/how-to-install-and-use-composer-on-ubuntu-18-04/
+Composer book at https://getcomposer.org/doc/
+
+sudo apt update
+sudo apt install -y wget php-cli php-zip unzip
+sudo systemctl restart php7.2-fpm
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+composer
+
+# Using Composer
+mkdir ~/testproject
+cd ~/testproject
+composer require nesbot/carbon
+nano testing.php
+---------
+<?php
+require __DIR__ . '/vendor/autoload.php';                 
+use Carbon\Carbon;
+printf("Now: %s", Carbon::now());
+---------
+php testing.php
+composer update

@@ -1,0 +1,76 @@
+2019-05-17
+Installing MySQL 5.7 on Ubuntu Server 18.04 LTS
+Excerpt from https://linuxize.com/post/how-to-install-mysql-on-ubuntu-18-04/
+MySQL docs at https://dev.mysql.com/doc/refman/5.7/en/
+
+sudo apt update
+sudo apt install -y mysql-server
+sudo systemctl status mysql
+sudo mysql_secure_installation           
+  no
+  verysecret/verysecret
+  y
+  y
+  y
+  y
+
+# Show version we got
+sudo apt list --installed | grep -i mysql
+
+# Enable root login via password: (not recommended)
+sudo mysql
+alter user 'root'@'localhost' identified with mysql_native_password by 'verysecret';
+flush privileges;
+\q
+mysql -uroot -pverysecret
+\q
+
+# Create administrative user (recommended)
+sudo mysql # or: mysql -uroot -pverysecret   if you enable root login via password, as shown above 
+create user 'admin'@'localhost' identified by 'verysecret';
+grant all privileges on *.* to 'admin'@'localhost' with grant option; 
+flush privileges;
+\q
+mysql -uadmin -pverysecret
+\q
+
+
+# Test whether PHP works with MySQL
+# create a small program:
+cd ~
+nano mysqlitest.php
+-----
+<?php
+$db = new mysqli("localhost", "root", "verysecret", "mysql");
+$rs = $db->query("select host, user from user");
+while ($row = $rs->fetch_assoc()) {
+    print_r($row);
+    }
+-----
+php mysqlitest.php
+
+
+
+# Test whether Python3 works with MySQL
+# if pip3 is not installed yet:
+sudo apt-get install -y python3-pip
+# database driver for python: (alternative would be MySQLdb) TODO: compare cursor types. Namedtuples preferred: https://dev.mysql.com/doc/connector-python/en/connector-python-api-mysqlcursor.html
+pip3 install mysql-connector
+# create a small program:
+cd ~
+nano testmysql.py
+-----
+import mysql.connector
+db = mysql.connector.connect(host="localhost", user="root", passwd="verysecret", database="mysql")
+print(db)
+cu = db.cursor(named_tuple=True)
+cu.execute("select host, user from user")
+rs = cu.fetchall()
+for r in rs:
+    print(r)
+-----
+python3 testmysql.py  
+
+   
+
+# TODO: Test whether Node.js works with MySQL

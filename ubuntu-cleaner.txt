@@ -1,0 +1,16 @@
+2019-05-17 Keeping your Ubuntu install clean
+                       
+# https://www.ostechnix.com/how-to-find-and-remove-unused-packages-in-linux/
+
+sudo apt-get autoclean
+sudo apt-get autoremove
+
+# ...or for a more manual process:
+
+sudo apt-get install deborphan
+deborphan
+sudo orphaner
+
+
+
+# Also take a look at https://www.maketecheasier.com/8-ways-to-maintain-a-clean-lean-ubuntu-machine/

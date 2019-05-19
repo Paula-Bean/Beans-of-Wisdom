@@ -1,0 +1,42 @@
+2019-05-17
+Installing PostgreSQL on Ubuntu Server 18.04 LTS
+Excerpt from https://linuxize.com/post/how-to-install-postgresql-on-ubuntu-18-04/
+PostgreSQL docs at https://www.postgresql.org/docs/10/index.html
+
+sudo apt update
+sudo apt install -y postgresql postgresql-contrib
+sudo -u postgres psql -c "SELECT version();"
+sudo -u postgres psql
+create database "userdb";
+create user "user" with password 'verysecret';
+grant all privileges on database "userdb" to "user";
+\q
+
+# Optional: enable remote access to PostgreSQL server
+# add "listen_addresses = '*'" in the 'connections and authentication' section:
+sudo nano /etc/postgresql/10/main/postgresql.conf
+-------
+listen_addresses = '*'
+-------
+sudo service postgresql restart
+ss -nlt | grep 5432
+# accept remote connections by editing the pg_hba.conf
+sudo nano /etc/postgresql/10/main/pg_hba.conf
+--------
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+# The user "user" will be able to access all databases from all locations using a md5 password
+host    all             user            0.0.0.0/0                md5
+# The user "user" will be able to access only the userdb from all locations using a md5 password
+host    userdb          user            0.0.0.0/0                md5
+# The user "user" will be able to access all databases from a trusted location (192.168.1.134) without a password
+host    all             user            192.168.1.134            trust
+--------
+sudo service postgresql restart
+                            
+
+
+
+# TODO: Test whether PHP works with PostgreSQL
+# TODO: Test whether Python3 works with PostgreSQL
+# TODO: Test whether Node.js works with PostgreSQL
+
