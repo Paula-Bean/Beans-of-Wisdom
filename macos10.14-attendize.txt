@@ -1,0 +1,61 @@
+
+cd ~/Sites
+git clone https://github.com/Attendize/Attendize
+cd Attendize
+cp .env.example .env
+# it is assumed that Apache runs under user:staff account
+chmod -R a+w storage/app
+chmod -R a+w storage/framework
+chmod -R a+w storage/logs
+chmod -R a+w storage/cache
+chmod -R a+w bootstrap/cache
+chmod -R a+w .env
+
+# edit composer.json, find the line:
+"phpspec/phpspec": "5.0.*",
+# change to:
+"phpspec/phpspec": "5.1.*",
+
+# TODO later: upstream warnings & issues
+#
+# composer install
+# Loading composer repositories with package information
+# Installing dependencies (including require-dev) from lock file
+# Your requirements could not be resolved to an installable set of packages.
+# Problem 1
+#    - Installation request for phpspec/phpspec 5.0.3 -> satisfiable by phpspec/phpspec[5.0.3].
+#   - phpspec/phpspec 5.0.3 requires php ^7.1, <7.3 -> your PHP version (7.3.5) does not satisfy that requirement.
+#
+# composer update
+# ....
+# Package phpoffice/phpexcel is abandoned, you should avoid using it. Use phpoffice/phpspreadsheet instead.
+
+
+brew install composer
+composer update
+composer install
+
+mysql -uroot -p****
+create database attendize;
+\q
+
+# edit virtual host config
+code /usr/local/etc/httpd/extra/httpd-vhosts.conf
+
+<VirtualHost *:80>
+    DocumentRoot "/Users/user/Sites/Attendize"
+    ServerName attendize.local
+</VirtualHost>
+
+# Restart Apache
+
+# zet ook in hosts
+code /private/etc/hosts
+127.0.0.1 attendize.local
+
+# browse naar http://attendize.local/install 
+
+- Don't use space in 'mail name'
+- add 'enable dummy payments' in config (see the Attendize site)
+
+

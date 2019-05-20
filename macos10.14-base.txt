@@ -1,0 +1,179 @@
+macOS Mojave 10.14.4
+
+comes standard with the following versions:
+
+php --version # 7.1.23 (11 Oct 2018)
+httpd -version # 2.4.34
+
+# install homebrew
+xcode-select --install
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+
+# Excerpt from macOS 10.14 Mojave Web Development Environment
+# https://getgrav.org/blog/macos-mojave-apache-multiple-php-versions
+# https://getgrav.org/blog/macos-mojave-apache-mysql-vhost-apc
+# https://getgrav.org/blog/macos-mojave-apache-ssl
+
+xcode-select --install
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew doctor
+brew install openldap libiconv
+# remove broken Apache, and reinstall
+sudo apachectl stop
+sudo launchctl unload -w /System/Library/LaunchDaemons/org.apache.httpd.plist 2>/dev/null
+brew install httpd
+sudo brew services start httpd
+# browse to http://localhost:8080
+
+Troubleshooting Tips
+# apache up?
+ps -aef | grep httpd
+# restart Apache
+sudo apachectl -k restart
+# watch the Apache error log
+tail -f /usr/local/var/log/httpd/error_log
+# control Apache
+sudo apachectl start
+sudo apachectl stop
+sudo apachectl -k restart
+
+# Visual Studio Code
+goto https://code.visualstudio.com/, click Download for Mac
+drag the downloaded application to Applications
+# manually add VS Code to your path:
+cat << EOF >> ~/.bash_profile
+export PATH="\$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+EOF
+
+# Apache configuration
+code /usr/local/etc/httpd/httpd.conf
+  change line 'Listen 8080' to 'Listen 80'.
+
+change line 'DocumentRoot "/usr/local/var/www"' to 'DocumentRoot /Users/[your_user_name]/Sites'
+also change the <Directory> tag: '<Directory /Users/[your_user_name]/Sites>'
+In the <Directory> block change AllowOverride to:
+  AllowOverride All
+Search for mod_rewrite.so and uncomment the line:
+  LoadModule rewrite_module lib/httpd/modules/mod_rewrite.so
+Change 'User' to your user name, and 'Group' to staff:
+  User user
+  Group staff
+locate Servername and change to:
+  ServerName localhost
+create a Sites folder:
+  mkdir ~/Sites
+  echo "<h1>Hello world</h1>" > ~/Sites/index.html
+# restart and test
+sudo apachectl -k restart
+# point browser to http://localhost
+
+
+# latest PHP
+brew install php
+# close all terminal windows and tabs, restart terminal
+php -v # 7.3.5 (as of 2019-05-19)
+
+# enable PHP in apache
+code /usr/local/etc/httpd/httpd.conf
+# in the LoadModule block, add
+LoadModule php7_module /usr/local/opt/php/lib/httpd/modules/libphp7.so
+Search for this block:
+  <IfModule dir_module>
+    DirectoryIndex index.html
+  </IfModule>
+..replace with:
+<IfModule dir_module>
+    DirectoryIndex index.php index.html
+</IfModule>
+
+<FilesMatch \.php$>
+    SetHandler application/x-httpd-php
+</FilesMatch>
+# restart apache
+sudo apachectl -k stop; sudo apachectl start
+# restart apache, after a reboot when launctl has started apache:
+sudo brew services restart httpd
+
+# validate PHP
+echo "<?php phpinfo();" > ~/Sites/info.php
+# visit http://localhost/info.php with browser
+
+# MySQL (mariadb)
+brew update
+brew install mariadb
+brew services start mariadb
+/usr/local/bin/mysql_secure_installation
+# download http://www.sequelpro.com/ , install, run, and connect through socket
+
+# Apache Virtual Hosts
+code /usr/local/etc/httpd/httpd.conf
+# uncomment the line:
+LoadModule vhost_alias_module lib/httpd/modules/mod_vhost_alias.so
+# also uncomment the line
+Include /usr/local/etc/httpd/extra/httpd-vhosts.conf
+
+# provide some content 
+mkdir ~/Sites/aap ~/Sites/noot
+echo Aap >~/Sites/aap/index.html
+echo Noot >~/Sites/noot/index.html
+
+# edit this file:
+code /usr/local/etc/httpd/extra/httpd-vhosts.conf
+
+<VirtualHost *:80>
+    DocumentRoot "/Users/user/Sites"
+    ServerName localhost
+</VirtualHost>
+
+<VirtualHost *:80>
+    DocumentRoot "/Users/user/Sites/aap"
+    ServerName aap.local
+</VirtualHost>
+
+<VirtualHost *:80>
+    DocumentRoot "/Users/user/Sites/noot"
+    ServerName noot.local
+</VirtualHost>
+
+# restart Apache
+sudo brew services restart httpd
+
+
+# edit hosts
+code /private/etc/hosts
+# append this line:
+127.0.0.1 aap.local noot.local
+
+# TIP: be sure that apache is not running
+sudo brew services stop httpd
+sudo apachectl stop
+netstat -an -finet | grep 80
+
+# start Apache
+sudo apachectl start
+
+# open in browser: http://aap.local  http://noot.local
+
+
+
+
+
+
+
+
+
+
+-----
+
+For compilers to find openldap you may need to set:
+  export LDFLAGS="-L/usr/local/opt/openldap/lib"
+  export CPPFLAGS="-I/usr/local/opt/openldap/include"
+
+For compilers to find libiconv you may need to set:
+  export LDFLAGS="-L/usr/local/opt/libiconv/lib"
+  export CPPFLAGS="-I/usr/local/opt/libiconv/include"
+
+
+DocumentRoot is /usr/local/var/www.
+
