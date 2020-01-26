@@ -1,0 +1,19 @@
+Add the Show Desktop button next to Start in Windows 10
+
+In Windows versions prior to Windows 7, there was a button which minimized all opened Windows and showed the desktop. In Windows 10, there is no such button. Instead, to minimize all open windows and show the Desktop, you need to move the mouse pointer to the right edge of the taskbar (or the bottom edge if your taskbar is vertical) and click a tiny invisible button. In this article, I would like to share how you can add the classic Show Desktop button next to Start in Windows 10.
+
+Here what you should do:
+
+Create a new shortcut by right clicking an empty area of the Desktop -> New -> Shortcut. Use the following command as its target:
+
+    explorer.exe shell:::{3080F90D-D7AD-11D9-BD98-0000947B0257}
+
+Name your shortcut as "Show Desktop"
+
+In the shortcut's properties, set its icon from C:\Windows\Explorer.exe
+
+Finally, right click the shortcut you created and select "Pin to taskbar" from its context menu
+
+Once this is done, you can remove the shortcut you created and drag the pinned item next to the Start button. Now you can use the pinned icon to minimize all open windows.
+
+Personally, I found this icon more useful than the default button offered by Windows 10 which is at the end of the taskbar. Touchscreen users may find adding this button very useful too.
