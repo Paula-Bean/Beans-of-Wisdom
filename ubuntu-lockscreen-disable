@@ -1,0 +1,35 @@
+# See
+# https://unix.stackexchange.com/questions/194582/turn-screen-off-when-inactive-for-time-period-in-rhel-and-debian
+# https://websiteforstudents.com/disable-turn-off-ubuntu-18-04-lts-beta-lock-screen/
+
+# disable blank screen
+in Settings/Power: 
+    Blank screen: Never
+    Automatic Suspend: 1hr (or never)
+
+# disable lock screen, from Terminal:
+
+gsettings set org.gnome.desktop.lockdown disable-lock-screen 'true'
+
+# blank screen, in seconds:
+
+xset dpms 300 300 300
+
+
+To make this permanent at start up:
+
+cd /etc/xdg/autostart
+touch blank.desktop
+chmod +x blank.desktop
+nano blank.desktop
+
+# Putting following in blank.desktop
+
+[Desktop Entry]
+Type=Application
+Exec="/usr/bin/xset dpms 300 300 300"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name=Startup Script
+
